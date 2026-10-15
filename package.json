@@ -1,7 +1,7 @@
 {
-  "name": "Express_Minimal_Template",
+  "name": "School data connection",
   "version": "1.0.0",
-  "description": "This is the minimal template for Express.js with TypeScript.",
+  "description": "This is a Nodejs server that provide school students and grades data from official source or substitute server.",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec tsx src/index.ts",
@@ -13,6 +13,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "dotenv": "^18.0.8",
     "express": "^5.2.1"
   },
   "devDependencies": {
