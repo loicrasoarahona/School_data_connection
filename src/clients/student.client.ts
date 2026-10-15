@@ -1,5 +1,6 @@
 import { Student } from "../types/interfaces.js";
 
 export interface StudentClient {
-  getAllStudents(filter: any): Promise<Student[]>;
+  getAll(filter: any): Promise<Student[]>;
+  getById(id: number): Promise<Student | null>;
 }
