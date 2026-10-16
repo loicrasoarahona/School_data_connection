@@ -1,6 +1,9 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
+import "./config/env.js";
+import studentRoute from "./routes/student.route.js";
+import { EntityNotFoundError } from "./errors/entity-not-found.error.js";
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
@@ -12,12 +15,16 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/hello", (req, res) => {
-  res.send("Hello, world !!");
-});
+app.use("/students", studentRoute);
 
-app.get("/hello/:name", (req, res) => {
-  res.send(`Hello, ${req.params.name} !!`);
+// gestion d'erreurs http
+app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
+  console.error(err);
+
+  if (err instanceof EntityNotFoundError) {
+    return res.status(404).json({ error: err.message });
+  }
+  return res.status(500).json({ error: "Une erreur s'est produite" });
 });
 
 app.listen(PORT, () => {
