@@ -61,7 +61,12 @@ export class StudentClientImpl implements StudentClient {
     return [];
   }
 
-  public async getClassLevels(): Promise<ClassLevel[]> {
+  public async getClassLevels(request: Request): Promise<ClassLevel[]> {
+    const clientId = request?.headers["x-client-id"];
+    if (clientId == "orientation_scolaire")
+      return this.studentClientForOrientation.getClassLevels(request);
+    if (clientId == "gestion_absence")
+      return this.studentClientForGestionAbsence.getClassLevels(request);
     return [];
   }
 
@@ -123,8 +128,10 @@ class StudentClientForGestionAbsence implements StudentClient {
     return response.data;
   }
 
-  public async getClassLevels(): Promise<ClassLevel[]> {
-    return [];
+  public async getClassLevels(req?: Request): Promise<ClassLevel[]> {
+    const url = `/class-levels`;
+    const response = await this.http.get(url, { headers: { ...req?.headers } });
+    return response.data;
   }
 
   public async getStudentGrades(
@@ -160,7 +167,7 @@ class StudentClientForOrientation implements StudentClient {
     return [];
   }
 
-  public async getClassLevels(): Promise<ClassLevel[]> {
+  public async getClassLevels(req: Request): Promise<ClassLevel[]> {
     return [];
   }
 

@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import "./config/env.js";
 import studentRoute from "./routes/student.route.js";
+import classLevelRoute from "./routes/class-level.route.js";
 import { EntityNotFoundError } from "./errors/entity-not-found.error.js";
 
 const PORT = process.env.PORT || 3000;
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/students", studentRoute);
+app.use("/class-levels", classLevelRoute);
 
 // gestion d'erreurs http
 app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
