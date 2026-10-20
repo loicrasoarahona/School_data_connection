@@ -49,7 +49,15 @@ export class StudentClientImpl implements StudentClient {
     return { totalItems: 0, members: [] };
   }
 
-  public async getParents(id: number): Promise<StudentParent[]> {
+  public async getParents(
+    id: number,
+    request: Request,
+  ): Promise<StudentParent[]> {
+    const clientId = request?.headers["x-client-id"];
+    if (clientId == "orientation_scolaire")
+      return this.studentClientForOrientation.getParents(id);
+    if (clientId == "gestion_absence")
+      return this.studentClientForGestionAbsence.getParents(id);
     return [];
   }
 
@@ -103,12 +111,16 @@ class StudentClientForGestionAbsence implements StudentClient {
     for (let field in filter) {
       url += `&${field}=${filter[field]}`;
     }
-    const response = await this.http.get(url);
+    const response = await this.http.get(url, {
+      headers: { ...request?.headers },
+    });
     return response.data;
   }
 
-  public async getParents(id: number): Promise<StudentParent[]> {
-    return [];
+  public async getParents(id: number, req?: Request): Promise<StudentParent[]> {
+    const url = `/students/${id}/parents`;
+    const response = await this.http.get(url, { headers: { ...req?.headers } });
+    return response.data;
   }
 
   public async getClassLevels(): Promise<ClassLevel[]> {

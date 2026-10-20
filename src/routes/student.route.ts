@@ -26,4 +26,13 @@ router.get("/:id", async (req, res) => {
   res.json(retour);
 });
 
+router.get("/:id/parents", async (req, res) => {
+  const id = req.params.id.toString();
+  const retour = await ServiceSelector.studentClient.getParents(
+    parseInt(id),
+    req,
+  );
+  res.json(retour);
+});
+
 export default router;

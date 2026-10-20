@@ -14,8 +14,8 @@ export interface StudentClient {
     page?: number,
     request?: Request,
   ): Promise<PaginationResultDto<Student>>;
-  getParents(id: number): Promise<StudentParent[]>;
-  getClassLevels(): Promise<ClassLevel[]>;
+  getParents(id: number, request?: Request): Promise<StudentParent[]>;
+  getClassLevels(request?: Request): Promise<ClassLevel[]>;
 
   getStudentGrades(
     id: number,
