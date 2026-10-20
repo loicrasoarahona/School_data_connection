@@ -9,6 +9,16 @@ router.get("/", async (req, res) => {
   res.json(await ServiceSelector.studentClient.getAll(filter, req));
 });
 
+router.get("/paginated", async (req, res) => {
+  const filter = req.query;
+  const retour = await ServiceSelector.studentClient.getAllPaginated(
+    filter,
+    parseInt(filter.page?.toString() || "1"),
+    req,
+  );
+  res.json(retour);
+});
+
 router.get("/:id", async (req, res) => {
   const id = req.params.id.toString();
   const retour = await ServiceSelector.studentClient.getById(parseInt(id), req);

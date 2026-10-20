@@ -43,6 +43,9 @@ export class StudentClientImpl implements StudentClient {
     page?: number,
     request?: Request,
   ): Promise<PaginationResultDto<Student>> {
+    const clientId = request?.headers["x-client-id"];
+    if (clientId == "gestion_absence")
+      return this.studentClientForGestionAbsence.getAllPaginated(filter, page);
     return { totalItems: 0, members: [] };
   }
 
@@ -95,7 +98,13 @@ class StudentClientForGestionAbsence implements StudentClient {
     page?: number,
     request?: Request,
   ): Promise<PaginationResultDto<Student>> {
-    return { totalItems: 0, members: [] };
+    let url = `/students/paginated?page=${page}`;
+    delete filter.page;
+    for (let field in filter) {
+      url += `&${field}=${filter[field]}`;
+    }
+    const response = await this.http.get(url);
+    return response.data;
   }
 
   public async getParents(id: number): Promise<StudentParent[]> {
