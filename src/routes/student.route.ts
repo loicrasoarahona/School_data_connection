@@ -6,12 +6,12 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   const filter = req.query;
-  res.json(await ServiceSelector.studentClient.getAll(filter));
+  res.json(await ServiceSelector.studentClient.getAll(filter, req));
 });
 
 router.get("/:id", async (req, res) => {
   const id = req.params.id.toString();
-  const retour = await ServiceSelector.studentClient.getById(parseInt(id));
+  const retour = await ServiceSelector.studentClient.getById(parseInt(id), req);
   if (!retour) throw new EntityNotFoundError(`Student ${id} not found`);
   res.json(retour);
 });
